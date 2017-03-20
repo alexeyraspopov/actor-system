@@ -11,11 +11,7 @@ export default class ActorSystem {
 
     this.iterators.set(coroutine, iterator);
 
-    for await (const state of iterator) {
-      await this.context.execute(() => {
-        this.states.set(coroutine, state);
-      });
-    }
+    for await (const state of iterator) continue;
   }
 
   dispose(coroutine) {
@@ -24,9 +20,5 @@ export default class ActorSystem {
     if (iterator) {
       iterator.return();
     }
-  }
-
-  getStateOf(coroutine) {
-    return this.states.get(coroutine);
   }
 }
