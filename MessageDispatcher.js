@@ -1,6 +1,6 @@
 export default class MessageDispatcher {
   constructor() {
-    this.mailboxes = [];
+    this.mailboxes = new Set();
   }
 
   dispatch(message) {
@@ -8,16 +8,16 @@ export default class MessageDispatcher {
   }
 
   [Symbol.asyncIterator]() {
-    const mailbox = new Mailbox();
-    this.mailboxes.push(mailbox);
-    return mailbox;
+    return new Mailbox(this);
   }
 }
 
 class Mailbox {
-  constructor() {
+  constructor(dispatcher) {
+    this.dispatcher = dispatcher;
     this.messages = [];
     this.pendings = [];
+    this.dispatcher.mailboxes.add(this);
   }
 
   push(message) {
@@ -38,5 +38,9 @@ class Mailbox {
         this.pendings.push(resolve);
       }
     });
+  }
+
+  return() {
+    this.dispatcher.mailboxes.delete(this);
   }
 }
