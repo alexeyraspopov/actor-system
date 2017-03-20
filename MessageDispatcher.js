@@ -1,16 +1,14 @@
 export default class MessageDispatcher {
-  constructor(context) {
-    this.context = context;
+  constructor() {
     this.queue = [];
   }
 
-  dispatch(message) {
-    return this.context.execute(() => {
-      while (this.queue.length > 0) {
-        const resolve = this.queue.shift();
-        resolve(message);
-      }
-    });
+  async dispatch(message) {
+    await Promise.resolve();
+    while (this.queue.length > 0) {
+      const resolve = this.queue.shift();
+      resolve(message);
+    }
   }
 
   [Symbol.asyncIterator]() {
