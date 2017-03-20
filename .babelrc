@@ -1,0 +1,11 @@
+{
+  "env": {
+    "development": {
+      "presets": ["stage-2"]
+    },
+    "production": {
+      "presets": [["es2015", {"modules": false, "loose": true}]],
+      "plugins": ["external-helpers"]
+    }
+  }
+}

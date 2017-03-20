@@ -12,23 +12,5 @@
   "scripts": {
     "start": "NODE_ENV=development babel-node example.js",
     "build": "NODE_ENV=production rollup --format cjs --config rollup.config.js index.js > lib.js"
-  },
-  "babel": {
-    "env": {
-      "development": {
-        "presets": [
-          "stage-2"
-        ]
-      },
-      "production": {
-        "presets": [
-          ["es2015", {"modules": false, "loose": true}],
-          "stage-2"
-        ],
-        "plugins": [
-          "external-helpers"
-        ]
-      }
-    }
   }
 }
