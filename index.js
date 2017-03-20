@@ -4,9 +4,10 @@ import ActorSystem from './ActorSystem';
 
 async function* CounterAct(system) {
   for await (const message of system.dispatcher) {
+    console.log('CounterAct::cycle', message.subject.name);
     switch (message.subject) {
     case IncrementCommand:
-      system.dispatcher.dispatch(new IncrementEvent());
+      yield system.dispatcher.dispatch(new IncrementEvent());
       break;
     default:
     }
@@ -16,8 +17,12 @@ async function* CounterAct(system) {
 async function* CounterStore(system) {
   let state = 0;
   for await (const message of system.dispatcher) {
-    state = reduce(state, message);
-    yield state;
+    const newState = reduce(state, message);
+    if (newState !== state) {
+      state = newState;
+      console.log('CounterStore::yield', message.subject.name, state);
+      yield system.dispatcher.dispatch(new StateMessage(state));
+    }
   }
 }
 
@@ -32,24 +37,33 @@ function reduce(state, message) {
 
 async function* Logger(system) {
   for await (const message of system.dispatcher) {
+    switch (message.subject) {
+    case StateMessage:
+      console.log('Logger::cycle', message.subject.name, message.content);
+      break;
+    default:
+      console.log('Logger::cycle', message.subject.name);
+    }
   }
 }
 
 async function* Main(system) {
-  await system.dispatcher.dispatch(new IncrementCommand());
-  await system.dispatcher.dispatch(new IncrementCommand());
+  yield await system.dispatcher.dispatch(new IncrementCommand());
+  yield await system.dispatcher.dispatch(new IncrementCommand());
 }
 
 class Message {
-  constructor() {
+  constructor(content) {
     this.subject = this.constructor;
+    this.content = content;
   }
 }
 
 class IncrementCommand extends Message {}
 class IncrementEvent extends Message {}
+class StateMessage extends Message {}
 
-const context = new ExecutionContext();
+const context = new ExecutionContext(1);
 const dispatcher = new MessageDispatcher(context);
 const system = new ActorSystem(context, dispatcher);
 
