@@ -1,5 +1,5 @@
-import MessageDispatcher from './MessageDispatcher';
-import ActorSystem from './ActorSystem';
+import MessageDispatcher from './modules/MessageDispatcher';
+import ActorSystem from './modules/ActorSystem';
 
 async function* CounterAct(dispatcher) {
   for await (const message of dispatcher) {
