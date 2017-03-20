@@ -3,7 +3,7 @@ export default class ActorSystem {
     this.dispatcher = dispatcher;
   }
 
-  spawn(coroutine) {
-    coroutine(this.dispatcher).next();
+  spawn(coroutine, ...args) {
+    coroutine(this.dispatcher, ...args).next();
   }
 }
