@@ -6,7 +6,7 @@ async function* CounterAct(dispatcher) {
     console.log('CounterAct::cycle', message.subject.name);
     switch (message.subject) {
     case IncrementCommand:
-      yield dispatcher.dispatch(new IncrementEvent());
+      dispatcher.dispatch(new IncrementEvent());
       break;
     default:
     }
@@ -20,7 +20,7 @@ async function* CounterStore(dispatcher) {
     if (newState !== state) {
       state = newState;
       console.log('CounterStore::yield', message.subject.name, state);
-      yield dispatcher.dispatch(new StateMessage(state));
+      dispatcher.dispatch(new StateMessage(state));
     }
   }
 }
@@ -47,8 +47,8 @@ async function* Logger(dispatcher) {
 }
 
 async function* Main(dispatcher) {
-  yield await dispatcher.dispatch(new IncrementCommand());
-  yield await dispatcher.dispatch(new IncrementCommand());
+  dispatcher.dispatch(new IncrementCommand());
+  dispatcher.dispatch(new IncrementCommand());
 }
 
 class Message {
