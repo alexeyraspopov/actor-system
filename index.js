@@ -1,27 +1,26 @@
-import ExecutionContext from './ExecutionContext';
 import MessageDispatcher from './MessageDispatcher';
 import ActorSystem from './ActorSystem';
 
-async function* CounterAct(system) {
-  for await (const message of system.dispatcher) {
+async function* CounterAct(dispatcher) {
+  for await (const message of dispatcher) {
     console.log('CounterAct::cycle', message.subject.name);
     switch (message.subject) {
     case IncrementCommand:
-      yield system.dispatcher.dispatch(new IncrementEvent());
+      yield dispatcher.dispatch(new IncrementEvent());
       break;
     default:
     }
   }
 }
 
-async function* CounterStore(system) {
+async function* CounterStore(dispatcher) {
   let state = 0;
-  for await (const message of system.dispatcher) {
+  for await (const message of dispatcher) {
     const newState = reduce(state, message);
     if (newState !== state) {
       state = newState;
       console.log('CounterStore::yield', message.subject.name, state);
-      yield system.dispatcher.dispatch(new StateMessage(state));
+      yield dispatcher.dispatch(new StateMessage(state));
     }
   }
 }
@@ -35,8 +34,8 @@ function reduce(state, message) {
   }
 }
 
-async function* Logger(system) {
-  for await (const message of system.dispatcher) {
+async function* Logger(dispatcher) {
+  for await (const message of dispatcher) {
     switch (message.subject) {
     case StateMessage:
       console.log('Logger::cycle', message.subject.name, message.content);
@@ -47,9 +46,9 @@ async function* Logger(system) {
   }
 }
 
-async function* Main(system) {
-  yield await system.dispatcher.dispatch(new IncrementCommand());
-  yield await system.dispatcher.dispatch(new IncrementCommand());
+async function* Main(dispatcher) {
+  yield await dispatcher.dispatch(new IncrementCommand());
+  yield await dispatcher.dispatch(new IncrementCommand());
 }
 
 class Message {
@@ -63,9 +62,8 @@ class IncrementCommand extends Message {}
 class IncrementEvent extends Message {}
 class StateMessage extends Message {}
 
-const context = new ExecutionContext(1);
-const dispatcher = new MessageDispatcher(context);
-const system = new ActorSystem(context, dispatcher);
+const dispatcher = new MessageDispatcher();
+const system = new ActorSystem(dispatcher);
 
 system.spawn(CounterAct);
 system.spawn(CounterStore);
