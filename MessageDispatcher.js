@@ -1,30 +1,42 @@
 export default class MessageDispatcher {
   constructor() {
-    this.queue = [];
+    this.mailboxes = [];
   }
 
-  async dispatch(message) {
-    await Promise.resolve();
-    while (this.queue.length > 0) {
-      const resolve = this.queue.shift();
-      resolve(message);
-    }
+  dispatch(message) {
+    for (const mailbox of this.mailboxes) mailbox.push(message);
   }
 
   [Symbol.asyncIterator]() {
-    return new DispatcherAsyncIterator(this);
+    const mailbox = new Mailbox();
+    this.mailboxes.push(mailbox);
+    return mailbox;
   }
 }
 
-class DispatcherAsyncIterator {
-  constructor(dispatcher) {
-    this.dispatcher = dispatcher;
+class Mailbox {
+  constructor() {
+    this.messages = [];
+    this.pendings = [];
+  }
+
+  push(message) {
+    if (this.pendings.length > 0) {
+      while (this.pendings.length > 0) {
+        this.pendings.shift()({ value: message, done: false });
+      }
+    } else {
+      this.messages.push(message);
+    }
   }
 
   next() {
     return new Promise(resolve => {
-      const resolver = (value) => resolve({ value, done: false });
-      this.dispatcher.queue.push(resolver);
+      if (this.messages.length > 0) {
+        resolve({ value: this.messages.shift(), done: false });
+      } else {
+        this.pendings.push(resolve);
+      }
     });
   }
 }
