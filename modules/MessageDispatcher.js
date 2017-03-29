@@ -3,6 +3,7 @@ import Mailbox from './Mailbox';
 export default class MessageDispatcher {
   constructor() {
     this.mailboxes = new Set();
+    this.disposable = { dispose: mailbox => this.mailboxes.delete(mailbox) };
   }
 
   dispatch(message) {
@@ -10,6 +11,8 @@ export default class MessageDispatcher {
   }
 
   [Symbol.asyncIterator]() {
-    return new Mailbox(this);
+    const mailbox = new Mailbox(this.disposable);
+    this.mailboxes.add(mailbox);
+    return mailbox;
   }
 }

@@ -1,9 +1,8 @@
 export default class Mailbox {
-  constructor(dispatcher) {
-    this.dispatcher = dispatcher;
+  constructor(disposable) {
+    this.disposable = disposable;
     this.messages = [];
     this.pendings = [];
-    this.dispatcher.mailboxes.add(this);
   }
 
   push(message) {
@@ -27,6 +26,6 @@ export default class Mailbox {
   }
 
   return() {
-    this.dispatcher.mailboxes.delete(this);
+    this.disposable.dispose(this);
   }
 }
