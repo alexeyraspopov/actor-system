@@ -4,6 +4,8 @@ export default class ActorSystem {
   }
 
   spawn(coroutine, ...args) {
-    coroutine(this.dispatcher, ...args).next();
+    const iterator = coroutine(this.dispatcher, ...args);
+    iterator.next();
+    return iterator;
   }
 }
