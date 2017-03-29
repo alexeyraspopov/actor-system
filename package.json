@@ -1,5 +1,10 @@
 {
-  "name": "as",
+  "name": "actor-system",
+  "description": "A proof of concept implementation of actor system in JavaScript",
+  "version": "0.0.0",
+  "main": "actor-system.js",
+  "license": "MIT",
+  "author": "Alexey Raspopov",
   "devDependencies": {
     "babel-cli": "~6.24.0",
     "babel-core": "~6.24.0",
@@ -11,6 +16,6 @@
   },
   "scripts": {
     "start": "NODE_ENV=development babel-node example.js",
-    "build": "NODE_ENV=production rollup --format cjs --config rollup.config.js index.js > lib.js"
+    "prepublish": "NODE_ENV=production rollup --format cjs --config rollup.config.js index.js > actor-system.js"
   }
 }
