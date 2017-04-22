@@ -12,7 +12,7 @@ const system = new ActorSystem(dispatcher);
 ```
 
 ```javascript
-async function* PingActor(dispatcher) {
+async function PingActor(dispatcher) {
   for await (const message of dispatcher) {
     switch (message.subject) {
     case 'Ping':
@@ -22,7 +22,7 @@ async function* PingActor(dispatcher) {
   }
 }
 
-async function* PongActor(dispatcher) {
+async function PongActor(dispatcher) {
   for await (const message of dispatcher) {
     switch (message.subject) {
     case 'Pong':
@@ -32,7 +32,7 @@ async function* PongActor(dispatcher) {
   }
 }
 
-async function* Main(dispatcher) {
+async function Main(dispatcher) {
   dispatcher.dispatch({ subject: 'Ping' });
 }
 
