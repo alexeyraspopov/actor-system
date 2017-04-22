@@ -1,7 +1,8 @@
 import MessageDispatcher from './modules/MessageDispatcher';
 import ActorSystem from './modules/ActorSystem';
+import Actor from './modules/Actor';
 
-async function* CounterAct(dispatcher) {
+async function CounterAct(dispatcher) {
   for await (const message of dispatcher) {
     console.log('CounterAct::cycle', message.subject.name);
     switch (message.subject) {
@@ -13,7 +14,7 @@ async function* CounterAct(dispatcher) {
   }
 }
 
-async function* CounterStore(dispatcher) {
+async function CounterStore(dispatcher) {
   let state = 0;
   for await (const message of dispatcher) {
     const newState = reduce(state, message);
@@ -34,8 +35,8 @@ function reduce(state, message) {
   }
 }
 
-async function* Logger(dispatcher) {
-  for await (const message of dispatcher) {
+class Logger extends Actor {
+  receive(message) {
     switch (message.subject) {
     case StateMessage:
       console.log('Logger::cycle', message.subject.name, message.content);
@@ -46,7 +47,7 @@ async function* Logger(dispatcher) {
   }
 }
 
-async function* Main(dispatcher) {
+async function Main(dispatcher) {
   dispatcher.dispatch(new IncrementCommand());
   dispatcher.dispatch(new IncrementCommand());
 }
@@ -67,5 +68,5 @@ const system = new ActorSystem(dispatcher);
 
 system.spawn(CounterAct);
 system.spawn(CounterStore);
-system.spawn(Logger);
+system.actorOf(Logger);
 system.spawn(Main);
