@@ -17,7 +17,7 @@ export default class ActorSystem {
     this.actors.set(name, instance);
     this.dispatcher.mailboxes.add(mailbox);
 
-    const iterator = this.spawn(async function* process(dispatcher, instance) {
+    const iterator = this.spawn(async function process(dispatcher, instance) {
       for await (const message of dispatcher) instance.receive(message);
     }, instance);
 
@@ -25,8 +25,6 @@ export default class ActorSystem {
   }
 
   spawn(coroutine, ...args) {
-    const iterator = coroutine(this.dispatcher, ...args);
-    iterator.next();
-    return iterator;
+    return coroutine(this.dispatcher, ...args);
   }
 }
