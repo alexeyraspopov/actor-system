@@ -6,7 +6,7 @@ export default class ActorSystem {
     this.actors = new Map();
   }
 
-  actorOf(Actor, name = Actor.constructor.name) {
+  actorOf(Actor, name = Actor.name) {
     if (this.actors.has(name)) {
       return this.actors.get(name);
     }
