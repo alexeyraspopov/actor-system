@@ -12,12 +12,9 @@ export default class ActorSystem {
     }
 
     const instance = new Actor();
-    const mailbox = new Mailbox(this.dispatcher.disposable);
-
     this.actors.set(name, instance);
-    this.dispatcher.mailboxes.add(mailbox);
 
-    const iterator = this.spawn(async function process(dispatcher, instance) {
+    this.spawn(async function process(dispatcher, instance) {
       for await (const message of dispatcher) instance.receive(message);
     }, instance);
 
