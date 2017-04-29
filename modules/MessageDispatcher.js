@@ -1,7 +1,8 @@
 import Mailbox from './Mailbox';
 
 export default class MessageDispatcher {
-  constructor() {
+  constructor(context) {
+    this.context = context;
     this.mailboxes = new Set();
     this.disposable = { dispose: mailbox => this.mailboxes.delete(mailbox) };
   }
@@ -11,7 +12,7 @@ export default class MessageDispatcher {
   }
 
   [Symbol.asyncIterator]() {
-    const mailbox = new Mailbox(this.disposable);
+    const mailbox = new Mailbox(this.context, this.disposable);
     this.mailboxes.add(mailbox);
     return mailbox;
   }

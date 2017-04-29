@@ -1,5 +1,6 @@
 export default class Mailbox {
-  constructor(disposable) {
+  constructor(context, disposable) {
+    this.context = context;
     this.disposable = disposable;
     this.messages = [];
     this.pendings = [];
@@ -8,7 +9,8 @@ export default class Mailbox {
   push(message) {
     if (this.pendings.length > 0) {
       while (this.pendings.length > 0) {
-        this.pendings.shift()({ value: message, done: false });
+        const pending = this.pendings.shift();
+        this.context.execute(() => pending({ value: message, done: false }));
       }
     } else {
       this.messages.push(message);
@@ -18,7 +20,8 @@ export default class Mailbox {
   next() {
     return new Promise(resolve => {
       if (this.messages.length > 0) {
-        resolve({ value: this.messages.shift(), done: false });
+        const message = this.messages.shift();
+        this.context.execute(() => resolve({ value: message, done: false }));
       } else {
         this.pendings.push(resolve);
       }
