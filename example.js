@@ -1,15 +1,15 @@
 import MessageDispatcher from './modules/MessageDispatcher';
+import Message from './modules/Message';
 import ActorSystem from './modules/ActorSystem';
 import Actor from './modules/Actor';
 
 async function CounterAct(dispatcher) {
   for await (const message of dispatcher) {
-    console.log('CounterAct::cycle', message.subject.name);
+    console.log('CounterAct', message.subject.name);
     switch (message.subject) {
     case IncrementCommand:
       dispatcher.dispatch(new IncrementEvent());
       break;
-    default:
     }
   }
 }
@@ -20,7 +20,7 @@ async function CounterStore(dispatcher) {
     const newState = reduce(state, message);
     if (newState !== state) {
       state = newState;
-      console.log('CounterStore::yield', message.subject.name, state);
+      console.log('CounterStore', message.subject.name, state);
       dispatcher.dispatch(new StateMessage(state));
     }
   }
@@ -39,10 +39,10 @@ class Logger extends Actor {
   receive(message) {
     switch (message.subject) {
     case StateMessage:
-      console.log('Logger::cycle', message.subject.name, message.content);
+      console.log('Logger', message.subject.name, message.content);
       break;
     default:
-      console.log('Logger::cycle', message.subject.name);
+      console.log('Logger', message.subject.name);
     }
   }
 }
@@ -50,13 +50,6 @@ class Logger extends Actor {
 async function Main(dispatcher) {
   dispatcher.dispatch(new IncrementCommand());
   dispatcher.dispatch(new IncrementCommand());
-}
-
-class Message {
-  constructor(content) {
-    this.subject = this.constructor;
-    this.content = content;
-  }
 }
 
 class IncrementCommand extends Message {}
