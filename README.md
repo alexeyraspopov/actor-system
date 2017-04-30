@@ -5,9 +5,11 @@ This lib is a proof of concept implementation of actor system in JavaScript.
 ## How to use
 
 ```javascript
-import { ActorSystem, MessageDispatcher } from 'thislib';
+import { ActorSystem, MessageDispatcher, ExecutionContext, AnimationFrameExecutor } from 'actor-system';
 
-const dispatcher = new MessageDispatcher();
+const executor = new AnimationFrameExecutor();
+const context = new ExecutionContext(executor);
+const dispatcher = new MessageDispatcher(context);
 const system = new ActorSystem(dispatcher);
 ```
 
