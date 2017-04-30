@@ -13,8 +13,8 @@ export default class ExecutionContext {
   }
 
   flush() {
-    return this.current.then(() => {
-      this.current = this.executor.execute(this.queue);
+    this.current = this.current.then(() => {
+      return this.executor.execute(this.queue);
     });
   }
 }
