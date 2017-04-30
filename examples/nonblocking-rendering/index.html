@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      div {
+        animation: some 1s infinite;
+        width: 30px;
+        height: 30px;
+        background: red;
+      }
+      @keyframes some {
+        from {
+          transform: rotate(0);
+        }
+
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+    <button id="start">Start</button>
+    <input type="text" id="value">
+    <script src="example-full.js"></script>
+  </body>
+</html>
