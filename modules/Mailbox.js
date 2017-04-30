@@ -35,4 +35,8 @@ export default class Mailbox {
   [Symbol.asyncIterator]() {
     return this;
   }
+
+  [Symbol.iterator]() {
+    return this;
+  }
 }

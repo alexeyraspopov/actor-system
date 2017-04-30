@@ -20,4 +20,8 @@ export default class MessageDispatcher {
   [Symbol.asyncIterator]() {
     return this.mailboxOf(Mailbox);
   }
+
+  [Symbol.iterator]() {
+    return this.mailboxOf(Mailbox);
+  }
 }
