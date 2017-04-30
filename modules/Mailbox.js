@@ -31,4 +31,8 @@ export default class Mailbox {
   return() {
     this.disposable.dispose(this);
   }
+
+  [Symbol.asyncIterator]() {
+    return this;
+  }
 }
