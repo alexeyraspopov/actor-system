@@ -15,7 +15,6 @@
     "rollup-plugin-babel": "~2.7.1"
   },
   "scripts": {
-    "start": "NODE_ENV=development babel-node example.js",
     "prepublish": "NODE_ENV=production rollup --format cjs --config rollup.config.js index.js > actor-system.js"
   }
 }
