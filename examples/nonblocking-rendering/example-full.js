@@ -67,8 +67,7 @@ class Deadline {
   }
 
   timeRemaining() {
-    const remaining = this.max - (performance.now() - this.start);
-    return remaining > 0 ? remaining : 0;
+    return this.max - (performance.now() - this.start);
   }
 }
 
