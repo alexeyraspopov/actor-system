@@ -243,7 +243,8 @@ class IncrementCommand extends Message {}
 class IncrementEvent extends Message {}
 class StateMessage extends Message {}
 
-const context = new ExecutionContext(new AnimationFrameExecutor(60));
+const executor = new AnimationFrameExecutor();
+const context = new ExecutionContext(executor);
 const dispatcher = new MessageDispatcher(context);
 const system = new ActorSystem(dispatcher);
 
