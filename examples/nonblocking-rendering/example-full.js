@@ -13,8 +13,8 @@ class ExecutionContext {
   }
 
   flush() {
-    return this.current.then(() => {
-      this.current = this.executor.execute(this.queue);
+    this.current = this.current.then(() => {
+      return this.executor.execute(this.queue);
     });
   }
 }
@@ -206,13 +206,7 @@ function reduce(state, message) {
 
 class Logger extends Actor {
   receive(message) {
-    switch (message.subject) {
-    case StateMessage:
-      console.log('Logger', message.subject.name, message.content);
-      break;
-    default:
-      console.log('Logger', message.subject.name);
-    }
+    console.log('Logger', message.subject.name, message.content);
   }
 }
 
