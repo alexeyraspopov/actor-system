@@ -1,5 +1,6 @@
 export default class Actor {
-  constructor(disposable) {
+  constructor(system, disposable) {
+    this.system = system;
     this.disposable = disposable;
   }
 

@@ -11,17 +11,17 @@ export default class ActorSystem {
       return this.actors.get(name);
     }
 
-    const instance = new Actor();
+    const instance = new Actor(this);
     this.actors.set(name, instance);
 
-    this.spawn(async function process(dispatcher, instance) {
-      for await (const message of dispatcher) instance.receive(message);
+    this.spawn(async function process(system, instance) {
+      for await (const message of system.dispatcher) instance.receive(message);
     }, instance);
 
     return instance;
   }
 
   spawn(coroutine, ...args) {
-    return coroutine(this.dispatcher, ...args);
+    return coroutine(this, ...args);
   }
 }
