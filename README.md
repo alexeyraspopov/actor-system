@@ -27,28 +27,28 @@ class Pong extends Message { }
 3. Implement actors.
 
 ```javascript
-async function PingActor(dispatcher) {
-  for await (const message of dispatcher) {
+async function PingActor(system) {
+  for await (const message of system.dispatcher) {
     switch (message.subject) {
     case Ping:
-      dispatcher.dispatch(new Pong());
+      system.dispatcher.dispatch(new Pong());
       break;
     }
   }
 }
 
-async function PongActor(dispatcher) {
-  for await (const message of dispatcher) {
+async function PongActor(system) {
+  for await (const message of system.dispatcher) {
     switch (message.subject) {
     case Pong:
-      dispatcher.dispatch(new Ping());
+      system.dispatcher.dispatch(new Ping());
       break;
     }
   }
 }
 
-async function Main(dispatcher) {
-  dispatcher.dispatch(new Ping());
+async function Main(system) {
+  system.dispatcher.dispatch(new Ping());
 }
 ```
 
