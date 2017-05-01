@@ -125,6 +125,10 @@ class Mailbox {
   return() {
     this.disposable.dispose(this);
   }
+
+  [Symbol.asyncIterator]() {
+    return this;
+  }
 }
 
 class MessageDispatcher {
@@ -138,10 +142,14 @@ class MessageDispatcher {
     for (const mailbox of this.mailboxes) mailbox.push(message);
   }
 
-  [Symbol.asyncIterator]() {
-    const mailbox = new Mailbox(this.context, this.disposable);
+  mailboxOf(MailboxType) {
+    const mailbox = new MailboxType(this.context, this.disposable);
     this.mailboxes.add(mailbox);
     return mailbox;
+  }
+
+  [Symbol.asyncIterator]() {
+    return this.mailboxOf(Mailbox);
   }
 }
 
