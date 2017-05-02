@@ -1,4 +1,4 @@
-import Mailbox from './Mailbox';
+import Mailbox from './Mailbox.js';
 
 export default class MessageDispatcher {
   constructor(context) {
