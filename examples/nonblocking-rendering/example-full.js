@@ -1,186 +1,12 @@
-class ExecutionContext {
-  constructor(executor) {
-    this.executor = executor;
-    this.queue = [];
-    this.current = Promise.resolve();
-  }
+import ExecutionContext from '../../modules/ExecutionContext.js';
+import AnimationFrameExecutor from '../../modules/AnimationFrameExecutor.js';
+import Actor from '../../modules/Actor.js';
+import ActorSystem from '../../modules/ActorSystem.js';
+import Message from '../../modules/Message.js';
+import MessageDispatcher from '../../modules/MessageDispatcher.js';
 
-  execute(routine) {
-    return new Promise((resolve, reject) => {
-      this.queue.push(new Task(routine, resolve, reject));
-      if (this.queue.length === 1) this.flush();
-    });
-  }
-
-  flush() {
-    this.current = this.current.then(() => {
-      return this.executor.execute(this.queue);
-    });
-  }
-}
-
-class Task {
-  constructor(routine, resolve, reject) {
-    this.routine = routine;
-    this.resolve = resolve;
-    this.reject = reject;
-  }
-
-  run() {
-    try {
-      this.resolve(this.routine());
-    } catch (error) {
-      this.reject(error);
-    }
-  }
-}
-
-class AnimationFrameExecutor {
-  constructor(targetFPS = 60) {
-    this.maxDeadline = Math.floor(1000 / targetFPS);
-  }
-
-  execute(queue) {
-    return new Promise(resolveQueue => {
-      requestAnimationFrame((timestamp) => {
-        const deadline = new Deadline(this.maxDeadline, timestamp);
-
-        while (deadline.timeRemaining() > 0 && queue.length > 0) {
-          const task = queue.shift();
-          task.run();
-        }
-
-        if (queue.length > 0) {
-          return resolveQueue(this.execute(queue));
-        }
-
-        resolveQueue();
-      });
-    });
-  }
-}
-
-class Deadline {
-  constructor(max, start) {
-    this.max = max;
-    this.start = start;
-  }
-
-  timeRemaining() {
-    return this.max - (performance.now() - this.start);
-  }
-}
-
-class Actor {
-  constructor(disposable) {
-    this.disposable = disposable;
-  }
-
-  receive() {
-    throw new Error('Actor::receive is an abstract method and should be overriden');
-  }
-
-  dispose() {
-    this.disposable.dispose();
-  }
-}
-
-class Message {
-  constructor(content) {
-    this.subject = this.constructor;
-    this.content = content;
-  }
-}
-
-class Mailbox {
-  constructor(context, disposable) {
-    this.context = context;
-    this.disposable = disposable;
-    this.messages = [];
-    this.pendings = [];
-  }
-
-  push(message) {
-    if (this.pendings.length > 0) {
-      while (this.pendings.length > 0) {
-        const pending = this.pendings.shift();
-        this.context.execute(() => pending({ value: message, done: false }));
-      }
-    } else {
-      this.messages.push(message);
-    }
-  }
-
-  next() {
-    return new Promise(resolve => {
-      if (this.messages.length > 0) {
-        const message = this.messages.shift();
-        this.context.execute(() => resolve({ value: message, done: false }));
-      } else {
-        this.pendings.push(resolve);
-      }
-    });
-  }
-
-  return() {
-    this.disposable.dispose(this);
-  }
-
-  [Symbol.asyncIterator]() {
-    return this;
-  }
-}
-
-class MessageDispatcher {
-  constructor(context) {
-    this.context = context;
-    this.mailboxes = new Set();
-    this.disposable = { dispose: mailbox => this.mailboxes.delete(mailbox) };
-  }
-
-  dispatch(message) {
-    for (const mailbox of this.mailboxes) mailbox.push(message);
-  }
-
-  mailboxOf(MailboxType) {
-    const mailbox = new MailboxType(this.context, this.disposable);
-    this.mailboxes.add(mailbox);
-    return mailbox;
-  }
-
-  [Symbol.asyncIterator]() {
-    return this.mailboxOf(Mailbox);
-  }
-}
-
-class ActorSystem {
-  constructor(dispatcher) {
-    this.dispatcher = dispatcher;
-    this.actors = new Map();
-  }
-
-  actorOf(Actor, name = Actor.name) {
-    if (this.actors.has(name)) {
-      return this.actors.get(name);
-    }
-
-    const instance = new Actor();
-    this.actors.set(name, instance);
-
-    this.spawn(async function process(dispatcher, instance) {
-      for await (const message of dispatcher) instance.receive(message);
-    }, instance);
-
-    return instance;
-  }
-
-  spawn(coroutine, ...args) {
-    return coroutine(this.dispatcher, ...args);
-  }
-}
-
-async function CounterAct(dispatcher) {
-  for await (const message of dispatcher) {
+async function CounterAct(system) {
+  for await (const message of system.dispatcher) {
     console.log('CounterAct', message.subject.name);
     switch (message.subject) {
     case IncrementCommand:
@@ -190,9 +16,9 @@ async function CounterAct(dispatcher) {
   }
 }
 
-async function CounterStore(dispatcher) {
+async function CounterStore(system) {
   let state = 0;
-  for await (const message of dispatcher) {
+  for await (const message of system.dispatcher) {
     const newState = reduce(state, message);
     if (newState !== state) {
       state = newState;
@@ -226,14 +52,14 @@ class Render extends Actor {
   }
 }
 
-async function Main(dispatcher) {
+async function Main(system) {
   start.addEventListener('click', () => {
     dispatcher.dispatch(new IncrementCommand());
   });
 
   let flag = true;
 
-  for await (const message of dispatcher) {
+  for await (const message of system.dispatcher) {
     switch (message.subject) {
     case IncrementEvent:
       if (flag) dispatcher.dispatch(new IncrementCommand());
