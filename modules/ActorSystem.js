@@ -12,11 +12,13 @@ export default class ActorSystem {
     }
 
     const instance = new Actor(this);
+    const mailbox = this.dispatcher.mailboxOf(Mailbox);
+
     this.actors.set(name, instance);
 
-    this.spawn(async function process(system, instance) {
-      for await (const message of system.dispatcher) instance.receive(message);
-    }, instance);
+    this.spawn(async function process(system, instance, mailbox) {
+      for await (const message of mailbox) instance.receive(message);
+    }, instance, mailbox);
 
     return instance;
   }
