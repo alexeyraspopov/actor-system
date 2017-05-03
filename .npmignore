@@ -1,4 +1,6 @@
 *
+!modules/
+!index.js
 !actor-system.js
 !package.json
 !README.md
