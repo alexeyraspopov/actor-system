@@ -6,6 +6,13 @@
   "module": "index.js",
   "license": "MIT",
   "author": "Alexey Raspopov",
+  "keywords": [
+    "async",
+    "actor",
+    "message",
+    "coroutine",
+    "dispatcher"
+  ],
   "devDependencies": {
     "babel-cli": "~6.24.0",
     "babel-core": "~6.24.0",
