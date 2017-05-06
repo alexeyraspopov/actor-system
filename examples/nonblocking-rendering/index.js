@@ -1,9 +1,11 @@
-import ExecutionContext from '../../modules/ExecutionContext.js';
-import AnimationFrameExecutor from '../../modules/AnimationFrameExecutor.js';
-import Actor from '../../modules/Actor.js';
-import ActorSystem from '../../modules/ActorSystem.js';
-import Message from '../../modules/Message.js';
-import MessageDispatcher from '../../modules/MessageDispatcher.js';
+import {
+  ExecutionContext,
+  AnimationFrameExecutor,
+  Actor,
+  ActorSystem,
+  Message,
+  MessageDispatcher,
+} from 'actor-system';
 
 async function CounterAct(system) {
   for await (const message of system.dispatcher) {

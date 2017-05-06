@@ -1,4 +1,4 @@
-## nonblocking-rendering
+## react-application
 
     npm install
     npm start
