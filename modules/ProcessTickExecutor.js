@@ -6,9 +6,6 @@ export default class ProcessTickExecutor {
   execute(queue) {
     return new Promise(resolveQueue => {
       process.nextTick(() => {
-        let maxRoutines = this.batchSize;
-
-        console.info(this.batchSize, queue.length);
         for (let i = 0; i < this.batchSize && queue.length > 0; i++) {
           const task = queue.shift();
           task.run();
