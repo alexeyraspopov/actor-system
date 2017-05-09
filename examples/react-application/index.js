@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import Coroutine from 'react-coroutine';
 import { ActorSystem, MessageDispatcher, ExecutionContext, AnimationFrameExecutor, Message } from 'actor-system';
 import Application from './modules/Application.react';
+import Wrapper from './modules/Wrapper.react';
 import Storage from './modules/Storage';
 import { SomeMessage } from './modules/Messages';
 
@@ -20,6 +21,7 @@ async function Main(system) {
 
 ReactDOM.render((
   <Application system={system} storage={storage}>
+    <Wrapper />
   </Application>
 ), document.querySelector('main'));
 
