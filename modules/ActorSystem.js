@@ -11,9 +11,9 @@ export default class ActorSystem {
   actorOf(Actor, name = Actor.name) {
     if (this.refs.has(name)) return this.refs.get(name);
 
-    const instance = new Actor(this);
-    const ref = new ActorRef();
     const mailbox = this.dispatcher.mailboxOf(Mailbox);
+    const instance = new Actor(this, mailbox.disposable);
+    const ref = new ActorRef();
 
     this.actors.set(name, instance);
     this.refs.set(name, ref);
