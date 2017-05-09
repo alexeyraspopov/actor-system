@@ -1,4 +1,5 @@
 export { default as AnimationFrameExecutor } from './modules/AnimationFrameExecutor';
+export { default as ProcessTickExecutor } from './modules/ProcessTickExecutor';
 export { default as ExecutionContext } from './modules/ExecutionContext';
 export { default as Mailbox } from './modules/Mailbox';
 export { default as Message } from './modules/Message';

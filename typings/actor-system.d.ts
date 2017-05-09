@@ -50,4 +50,10 @@ declare module ActorSystem {
     constructor(targetFPS: number);
     async execute(routines: Array<Function>): void;
   }
+
+  export class AnimationFrameExecutor implements Executor {
+    batchSize: number;
+    constructor(batchSize: ?number);
+    async execute(routines: Array<Function>): void;
+  }
 }
