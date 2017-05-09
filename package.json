@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "main": "actor-system.js",
   "module": "index.js",
+  "types": "typings/actor-system.d.ts",
   "license": "MIT",
   "author": "Alexey Raspopov",
   "keywords": [
