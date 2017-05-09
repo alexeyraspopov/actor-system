@@ -1,13 +1,9 @@
 export default class ActorRef {
-  constructor() {
-
+  constructor(mailbox) {
+    this.mailbox = mailbox;
   }
 
   tell(message) {
-
-  }
-
-  ask(message) {
-
+    this.mailbox.push(message);
   }
 }

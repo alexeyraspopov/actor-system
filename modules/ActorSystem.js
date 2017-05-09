@@ -13,7 +13,7 @@ export default class ActorSystem {
 
     const mailbox = this.dispatcher.mailboxOf(Mailbox);
     const instance = new Actor(this, mailbox.disposable);
-    const ref = new ActorRef();
+    const ref = new ActorRef(mailbox);
 
     this.actors.set(name, instance);
     this.refs.set(name, ref);
