@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Coroutine from 'react-coroutine';
-import { ActorSystem, MessageDispatcher, ExecutionContext, AnimationFrameExecutor, Message } from 'actor-system';
+import { ActorSystem, MessageDispatcher, ExecutionContext, AnimationFrameExecutor } from 'actor-system';
 import Application from './modules/Application.react';
 import Wrapper from './modules/Wrapper.react';
 import Storage from './modules/Storage';
