@@ -51,7 +51,7 @@ declare module ActorSystem {
     async execute(routines: Array<Function>): void;
   }
 
-  export class AnimationFrameExecutor implements Executor {
+  export class ProcessTickExecutor implements Executor {
     batchSize: number;
     constructor(batchSize: ?number);
     async execute(routines: Array<Function>): void;
