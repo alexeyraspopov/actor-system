@@ -12,7 +12,7 @@ declare module ActorSystem {
 
   export class Actor {
     constructor();
-    receive(): void;
+    receive(message: Message<*>): void;
     dispose(): void;
   }
 
@@ -23,11 +23,11 @@ declare module ActorSystem {
   }
 
   export class Mailbox implements AsyncIterator {
-    constructor();
-    push();
-    next();
-    throw();
-    return();
+    constructor(context, disposable);
+    push(message: Message<*>): void;
+    async next(): void;
+    throw(): void;
+    return(): void;
   }
 
   export class Message<T> {
