@@ -28,6 +28,10 @@ export default class Mailbox {
     });
   }
 
+  throw() {
+    this.disposable.dispose(this);
+  }
+
   return() {
     this.disposable.dispose(this);
   }
