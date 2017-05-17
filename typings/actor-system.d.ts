@@ -11,7 +11,7 @@ declare module ActorSystem {
   }
 
   export class Actor {
-    constructor();
+    constructor(system, disposable);
     receive(message: Message<*>): void;
     dispose(): void;
   }
