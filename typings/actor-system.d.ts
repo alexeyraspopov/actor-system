@@ -20,6 +20,7 @@ declare module ActorSystem {
     constructor(context: ExecutionContext);
     mailboxOf(MailboxType: typeof Mailbox): Mailbox;
     dispatch(message: Message<*>): void;
+    [Symbol.asyncIterator](): Mailbox;
   }
 
   export class Mailbox implements AsyncIterator {
