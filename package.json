@@ -1,7 +1,7 @@
 {
   "name": "actor-system",
   "description": "A proof of concept implementation of actor system in JavaScript",
-  "version": "0.0.0",
+  "version": "2.0.0-alpha.1",
   "main": "actor-system.js",
   "module": "index.js",
   "types": "typings/actor-system.d.ts",
