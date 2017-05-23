@@ -18,8 +18,11 @@ export default class ActorSystem {
     this.actors.set(name, instance);
     this.refs.set(name, ref);
 
-    this.spawn(async function process(system, instance, mailbox) {
-      for await (const message of mailbox) instance.receive(message);
+    this.spawn(function process(system, instance, mailbox) {
+      return mailbox.next().then(({ value, done }) => {
+        if (value !== undefined) instance.receive(value);
+        if (!done) return process(system, instance, mailbox);
+      });
     }, instance, mailbox);
 
     return ref;
