@@ -6,6 +6,8 @@ This lib is a proof of concept implementation of actor system in JavaScript.
 
     npm install actor-system
 
+Thanks to [@kt3k](https://github.com/kt3k) for providing the name in NPM registry.
+
 ## How to use
 
 1. Bootstrap actor system.
