@@ -3,7 +3,7 @@
   "description": "A proof of concept implementation of actor system in JavaScript",
   "version": "2.0.0-alpha.1",
   "main": "actor-system.js",
-  "module": "index.js",
+  "jsnext:main": "index.js",
   "types": "typings/actor-system.d.ts",
   "license": "MIT",
   "author": "Alexey Raspopov",
