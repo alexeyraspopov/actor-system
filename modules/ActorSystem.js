@@ -42,4 +42,8 @@ export default class ActorSystem {
   spawn(coroutine, ...args) {
     return coroutine(this, ...args);
   }
+
+  terminate() {
+    for (const actor of this.actors.values()) actor.dispose();
+  }
 }
