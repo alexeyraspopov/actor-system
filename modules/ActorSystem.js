@@ -1,7 +1,18 @@
 import Mailbox from './Mailbox.js';
 import ActorRef from './ActorRef.js';
+import AnimationFrameExecutor from './AnimationFrameExecutor.js';
+import ExecutionContext from './ExecutionContext.js';
+import MessageDispatcher from './MessageDispatcher.js';
 
 export default class ActorSystem {
+  static fromDefaults() {
+    const executor = new AnimationFrameExecutor();
+    const context = new ExecutionContext(executor);
+    const dispatcher = new MessageDispatcher(context);
+    const system = new ActorSystem(dispatcher);
+    return system;
+  }
+
   constructor(dispatcher) {
     this.dispatcher = dispatcher;
     this.actors = new Map();

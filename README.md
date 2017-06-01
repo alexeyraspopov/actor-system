@@ -21,6 +21,14 @@ const dispatcher = new MessageDispatcher(context);
 const system = new ActorSystem(dispatcher);
 ```
 
+Or by using default set of tools:
+
+```javascript
+import { ActorSystem } from 'actor-system';
+
+const system = ActorSystem.fromDefaults();
+```
+
 2. Define message types.
 
 ```javascript
