@@ -15,7 +15,7 @@ Thanks to [@kt3k](https://github.com/kt3k) for providing the name in NPM registr
 ```javascript
 import { ActorSystem, MessageDispatcher, ExecutionContext, AnimationFrameExecutor } from 'actor-system';
 
-const executor = new AnimationFrameExecutor();
+const executor = new AnimationFrameExecutor(60);
 const context = new ExecutionContext(executor);
 const dispatcher = new MessageDispatcher(context);
 const system = new ActorSystem(dispatcher);
