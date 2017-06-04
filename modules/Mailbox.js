@@ -19,11 +19,11 @@ export default class Mailbox {
 
   next() {
     return new Promise(resolve => {
+      this.pendings.push(resolve);
+
       if (this.messages.length > 0) {
         const message = this.messages.shift();
-        this.context.execute(() => resolve({ value: message, done: false }));
-      } else {
-        this.pendings.push(resolve);
+        this.context.execute(() => this.push(message));
       }
     });
   }
