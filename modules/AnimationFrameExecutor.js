@@ -25,11 +25,10 @@ export default class AnimationFrameExecutor {
 
 class Deadline {
   constructor(max, start) {
-    this.max = max;
-    this.start = start;
+    this.deadline = start + max;
   }
 
   timeRemaining() {
-    return this.max - (performance.now() - this.start);
+    return this.deadline - performance.now();
   }
 }
