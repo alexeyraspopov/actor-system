@@ -14,7 +14,9 @@ export default class ExecutionContext {
 
   flush() {
     this.current = this.current.then(() => {
-      return this.executor.execute(this.queue);
+      if (this.queue.length > 0) {
+        return this.executor.execute(this.queue);
+      }
     });
   }
 }
