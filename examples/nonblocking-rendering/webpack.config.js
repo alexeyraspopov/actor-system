@@ -3,7 +3,6 @@ const path = require('path');
 const babelOptions = {
   babelrc: false,
   presets: [
-    require.resolve('babel-preset-react'),
     require.resolve('babel-preset-es2017'),
     require.resolve('babel-preset-stage-3'),
   ]
