@@ -7,13 +7,14 @@ export default class Mailbox {
   }
 
   push(message) {
+    this.messages.push(message);
+
     if (this.pendings.length > 0) {
+      const nextMessage = this.messages.shift();
       while (this.pendings.length > 0) {
         const pending = this.pendings.shift();
-        this.context.execute(() => pending({ value: message, done: false }));
+        this.context.execute(() => pending({ value: nextMessage, done: false }));
       }
-    } else {
-      this.messages.push(message);
     }
   }
 
